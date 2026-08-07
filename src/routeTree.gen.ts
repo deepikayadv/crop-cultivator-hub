@@ -11,8 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CropsRouteImport } from './routes/crops'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketRouteImport } from './routes/market'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SchemesRouteImport } from './routes/schemes'
+import { Route as WeatherRouteImport } from './routes/weather'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,9 +28,24 @@ const CropsRoute = CropsRouteImport.update({
   path: '/crops',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketRoute = MarketRouteImport.update({
   id: '/market',
   path: '/market',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -34,39 +53,85 @@ const SchemesRoute = SchemesRouteImport.update({
   path: '/schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WeatherRoute = WeatherRouteImport.update({
+  id: '/weather',
+  path: '/weather',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/crops': typeof CropsRoute
+  '/help': typeof HelpRoute
+  '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
+  '/weather': typeof WeatherRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/crops': typeof CropsRoute
+  '/help': typeof HelpRoute
+  '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
+  '/weather': typeof WeatherRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/crops': typeof CropsRoute
+  '/help': typeof HelpRoute
+  '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/profile': typeof ProfileRoute
   '/schemes': typeof SchemesRoute
+  '/weather': typeof WeatherRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/crops' | '/market' | '/schemes'
+  fullPaths:
+    | '/'
+    | '/crops'
+    | '/help'
+    | '/login'
+    | '/market'
+    | '/profile'
+    | '/schemes'
+    | '/weather'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/crops' | '/market' | '/schemes'
-  id: '__root__' | '/' | '/crops' | '/market' | '/schemes'
+  to:
+    | '/'
+    | '/crops'
+    | '/help'
+    | '/login'
+    | '/market'
+    | '/profile'
+    | '/schemes'
+    | '/weather'
+  id:
+    | '__root__'
+    | '/'
+    | '/crops'
+    | '/help'
+    | '/login'
+    | '/market'
+    | '/profile'
+    | '/schemes'
+    | '/weather'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CropsRoute: typeof CropsRoute
+  HelpRoute: typeof HelpRoute
+  LoginRoute: typeof LoginRoute
   MarketRoute: typeof MarketRoute
+  ProfileRoute: typeof ProfileRoute
   SchemesRoute: typeof SchemesRoute
+  WeatherRoute: typeof WeatherRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,11 +150,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CropsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/market': {
       id: '/market'
       path: '/market'
       fullPath: '/market'
       preLoaderRoute: typeof MarketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -99,14 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/weather': {
+      id: '/weather'
+      path: '/weather'
+      fullPath: '/weather'
+      preLoaderRoute: typeof WeatherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CropsRoute: CropsRoute,
+  HelpRoute: HelpRoute,
+  LoginRoute: LoginRoute,
   MarketRoute: MarketRoute,
+  ProfileRoute: ProfileRoute,
   SchemesRoute: SchemesRoute,
+  WeatherRoute: WeatherRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
