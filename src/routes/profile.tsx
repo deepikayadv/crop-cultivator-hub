@@ -303,8 +303,9 @@ export function ProfilePage() {
 
   // Weather for farmer's district
   const matchedWeather =
-    districtWeather.find((w) => w.district.en.toLowerCase() === (farmer.district || "").toLowerCase()) ||
-    districtWeather[0]!;
+    districtWeather.find((w) =>
+      w.district.en.toLowerCase().includes((farmer.district || "").toLowerCase()),
+    ) || districtWeather[0]!;
 
   // Matched crop details
   const activeCrop = crops.find(
@@ -645,13 +646,13 @@ export function ProfilePage() {
               <div className="mt-4 flex items-center justify-between">
                 <div>
                   <span className="font-display text-4xl font-bold text-[#43373D]">
-                    {matchedWeather.forecast[0]?.tempMax}°C
+                    {matchedWeather.days[0]?.high}°C
                   </span>
                   <span className="block text-xs text-[#69585F] mt-1">
-                    Min {matchedWeather.forecast[0]?.tempMin}°C • {tr(matchedWeather.forecast[0]?.condition || { en: "Clear", hi: "साफ" })}
+                    Min {matchedWeather.days[0]?.low}°C • {tr(matchedWeather.days[0]?.condition || { en: "Clear", hi: "साफ" })}
                   </span>
                 </div>
-                <span className="text-4xl">{matchedWeather.forecast[0]?.icon === "rain" ? "🌧️" : "☀️"}</span>
+                <span className="text-4xl">{matchedWeather.days[0]?.icon === "rain" || matchedWeather.days[0]?.icon === "storm" ? "🌧️" : "☀️"}</span>
               </div>
 
               {/* Spray Window Status */}

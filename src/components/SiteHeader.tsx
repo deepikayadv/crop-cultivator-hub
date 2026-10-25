@@ -305,20 +305,18 @@ export function SiteHeader() {
             )}
           </Link>
 
-          {/* My Profile Link (direct nav tab when logged in) */}
-          {farmer && (
-            <Link to="/profile" className={navItemClass(isProfile)}>
-              <User className="size-4" aria-hidden />
-              <span>{t("navProfile")}</span>
-              {isProfile && (
-                <span
-                  className="size-1.5 rounded-full bg-[#B8D8BA]"
-                  aria-label="Active page"
-                  title="Active page"
-                />
-              )}
-            </Link>
-          )}
+          {/* Profile Link (accessible in guest or logged-in mode) */}
+          <Link to="/profile" className={navItemClass(isProfile)}>
+            <User className="size-4" aria-hidden />
+            <span>{farmer ? t("navProfile") : "Profile"}</span>
+            {isProfile && (
+              <span
+                className="size-1.5 rounded-full bg-[#B8D8BA]"
+                aria-label="Active page"
+                title="Active page"
+              />
+            )}
+          </Link>
 
           {/* Admin link (Always accessible for evaluator evaluation) */}
           <Link
@@ -403,6 +401,7 @@ export function SiteHeader() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52 bg-white border-[#DCDFC8]">
                   <DropdownMenuItem
+                    onSelect={() => void navigate({ to: "/profile" })}
                     onClick={() => void navigate({ to: "/profile" })}
                     className="cursor-pointer flex items-center gap-2"
                   >
@@ -411,6 +410,7 @@ export function SiteHeader() {
                   </DropdownMenuItem>
                   {(isAdmin || isSessionAdmin || farmer.phone === "9999999999" || farmer.role === "admin") && (
                     <DropdownMenuItem
+                      onSelect={() => void navigate({ to: "/admin" })}
                       onClick={() => void navigate({ to: "/admin" })}
                       className="cursor-pointer flex items-center gap-2 text-[#69585F] font-semibold"
                     >
@@ -419,6 +419,7 @@ export function SiteHeader() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem
+                    onSelect={() => void navigate({ to: "/login" })}
                     onClick={() => void navigate({ to: "/login" })}
                     className="cursor-pointer flex items-center gap-2"
                   >
@@ -427,6 +428,10 @@ export function SiteHeader() {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-[#DCDFC8]" />
                   <DropdownMenuItem
+                    onSelect={() => {
+                      signOut();
+                      void navigate({ to: "/" });
+                    }}
                     onClick={() => {
                       signOut();
                       void navigate({ to: "/" });

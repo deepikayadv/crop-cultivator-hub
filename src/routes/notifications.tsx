@@ -36,13 +36,17 @@ export const Route = createFileRoute("/notifications")({
 export function NotificationsPage() {
   const { t, tr } = useLanguage();
   const { farmer } = useFarmerSession();
-  const phone = farmer?.phone || "9876543210";
+  const phone = farmer?.phone;
 
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [filterTab, setFilterTab] = useState<"all" | "unread" | "read">("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const reloadNotifs = () => {
+    if (!phone) {
+      setNotifications([]);
+      return;
+    }
     setNotifications(frontendStore.getNotifications(phone));
   };
 
@@ -56,6 +60,7 @@ export function NotificationsPage() {
   };
 
   const handleMarkAllRead = () => {
+    if (!phone) return;
     frontendStore.markAllNotificationsRead(phone);
     reloadNotifs();
   };
@@ -157,11 +162,18 @@ export function NotificationsPage() {
             <div className="rounded-2xl border border-dashed border-[#DCDFC8] bg-white p-12 text-center">
               <Bell className="mx-auto size-10 text-[#69585F]/50" />
               <h3 className="mt-3 font-display text-lg font-bold text-[#43373D]">
-                No notifications in this view
+                {!farmer ? "Guest Mode — No Farmer Alerts" : "No notifications in this view"}
               </h3>
-              <p className="mt-1 text-xs text-[#69585F]">
-                You are all caught up! When new alerts or scheme announcements occur, they will appear here.
+              <p className="mt-1 text-xs text-[#69585F] max-w-sm mx-auto">
+                {!farmer
+                  ? "Sign in to receive personalized weather alerts, harvest reminders, and government scheme updates for your farm."
+                  : "You are all caught up! When new alerts or scheme announcements occur, they will appear here."}
               </p>
+              {!farmer && (
+                <Button asChild size="sm" className="mt-4 bg-[#69585F] text-white">
+                  <Link to="/login">Sign In with Phone</Link>
+                </Button>
+              )}
             </div>
           ) : (
             filtered.map((item) => (

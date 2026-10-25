@@ -28,12 +28,16 @@ export const Route = createFileRoute("/saved-schemes")({
 export function SavedSchemesPage() {
   const { t, tr } = useLanguage();
   const { farmer } = useFarmerSession();
-  const phone = farmer?.phone || "9876543210";
+  const phone = farmer?.phone;
 
   const [savedSchemes, setSavedSchemes] = useState<Scheme[]>([]);
   const [query, setQuery] = useState("");
 
   const reloadSaved = () => {
+    if (!phone) {
+      setSavedSchemes([]);
+      return;
+    }
     const list = frontendStore.getSavedSchemes(phone);
     const matched = schemes.filter((s) => list.some((item) => item.schemeId === s.id));
     setSavedSchemes(matched);
@@ -44,6 +48,7 @@ export function SavedSchemesPage() {
   }, [phone]);
 
   const handleRemove = (schemeId: string) => {
+    if (!phone) return;
     frontendStore.toggleSaveScheme(schemeId, phone);
     reloadSaved();
   };
@@ -94,14 +99,23 @@ export function SavedSchemesPage() {
             <div className="rounded-2xl border border-dashed border-[#DCDFC8] bg-white p-12 text-center">
               <Bookmark className="mx-auto size-10 text-[#69585F]/50" />
               <h3 className="mt-3 font-display text-lg font-bold text-[#43373D]">
-                No saved schemes found
+                {!farmer ? "Guest Mode — No Saved Schemes" : "No saved schemes found"}
               </h3>
               <p className="mt-1 text-xs text-[#69585F] max-w-sm mx-auto">
-                Browse government schemes and click the bookmark icon on any card to save it here for fast reference.
+                {!farmer
+                  ? "Sign in to save and access your bookmarked government agricultural subsidies and credit programs."
+                  : "Browse government schemes and click the bookmark icon on any card to save it here for fast reference."}
               </p>
-              <Button asChild size="sm" className="mt-4 bg-[#69585F] text-white">
-                <Link to="/schemes">Browse Government Schemes</Link>
-              </Button>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+                {!farmer && (
+                  <Button asChild size="sm" className="bg-[#69585F] text-white">
+                    <Link to="/login">Sign In with Phone</Link>
+                  </Button>
+                )}
+                <Button asChild size="sm" variant="outline" className="border-[#DCDFC8]">
+                  <Link to="/schemes">Browse Government Schemes</Link>
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="grid gap-6 lg:grid-cols-2">

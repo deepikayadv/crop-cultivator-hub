@@ -68,6 +68,15 @@ export function RecommendationsPage() {
     runAdvisor();
   }, [state, season, soil, water]);
 
+  useEffect(() => {
+    if (farmer) {
+      setState(farmer.state || "Haryana");
+      setSoil(farmer.soilType || "alluvial");
+      setWater(farmer.waterAvailability || "canal");
+      setLandAcres(farmer.landSize || "4.5");
+    }
+  }, [farmer]);
+
   const toggleCompare = (rec: CropRecommendation) => {
     if (comparedCrops.some((c) => c.cropId === rec.cropId)) {
       setComparedCrops(comparedCrops.filter((c) => c.cropId !== rec.cropId));
@@ -81,8 +90,10 @@ export function RecommendationsPage() {
   };
 
   const handleStartPlan = (rec: CropRecommendation) => {
-    // Add directly to crop plans and navigate
-    const phone = farmer?.phone || "9876543210";
+    if (!farmer) {
+      void navigate({ to: "/login" });
+      return;
+    }
     frontendStore.addPlan(
       {
         crop: rec.crop.en,
@@ -92,7 +103,7 @@ export function RecommendationsPage() {
         status: "planned",
         notes: `Adopted from Crop Advisor (${rec.score}% suitability match).`,
       },
-      phone,
+      farmer.phone,
     );
     void navigate({ to: "/planner" });
   };
