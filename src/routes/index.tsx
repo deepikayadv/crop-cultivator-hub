@@ -36,32 +36,42 @@ export const Route = createFileRoute("/")({
 
 const services = [
   { to: "/schemes", icon: Landmark, key: "navSchemes" },
-  { to: "/crops", icon: CalendarDays, key: "navCrops" },
+  { to: "/planner", icon: CalendarDays, key: "navPlanner" },
+  { to: "/recommendations", icon: Sprout, key: "navRecommendation" },
   { to: "/market", icon: IndianRupee, key: "navMarket" },
+  { to: "/expenses", icon: IndianRupee, key: "navFinance" },
   { to: "/weather", icon: CloudSun, key: "navWeather" },
   { to: "/help", icon: LifeBuoy, key: "navHelp" },
 ] as const;
 
 const serviceBlurbs = {
   "/schemes": {
-    en: "Eligibility, benefit amount and the documents you need for each scheme.",
-    hi: "हर योजना की पात्रता, लाभ राशि और ज़रूरी दस्तावेज़।",
+    en: "Rule-based eligibility checker, benefit amounts, bookmarking, and official application portals.",
+    hi: "नियम-आधारित पात्रता जांच, लाभ राशि, योजना बुकमार्क और आधिकारिक आवेदन पोर्टल।",
   },
-  "/crops": {
-    en: "Sowing and harvest windows, water need and field tips for 10 major crops.",
-    hi: "10 प्रमुख फसलों की बुवाई-कटाई अवधि, पानी की ज़रूरत और खेत की सलाह।",
+  "/planner": {
+    en: "Seasonal planning, field area allocation, growth stage progress tracking, and harvest targets.",
+    hi: "मौसमी योजना, खेत क्षेत्रफल आवंटन, विकास चरण प्रगति ट्रैकिंग और कटाई लक्ष्य।",
+  },
+  "/recommendations": {
+    en: "Agro-climatic suitability engine matching soil, irrigation, budget, and season to high-yield crops.",
+    hi: "मिट्टी, सिंचाई, बजट और मौसम के आधार पर उपयुक्त फसलों की सिफारिश और तुलना।",
   },
   "/market": {
-    en: "Modal rates across major mandis with the day's movement.",
-    hi: "प्रमुख मंडियों के मॉडल भाव और दिन का उतार-चढ़ाव।",
+    en: "Real-time modal rates across APMC mandis, high/low spread comparisons, and price movements.",
+    hi: "प्रमुख मंडियों के मॉडल भाव, अधिकतम/न्यूनतम स्प्रेड तुलना और दिन का उतार-चढ़ाव।",
+  },
+  "/expenses": {
+    en: "Input cost logging, harvest sales records in quintals, category breakdowns, and net profit tracking.",
+    hi: "इनपुट लागत, क्विंटल में फसल बिक्री, श्रेणीवार खर्च और शुद्ध मुनाफ़ा गणना।",
   },
   "/weather": {
-    en: "Seven-day district forecast with spray and irrigation warnings.",
-    hi: "सात दिन का ज़िला पूर्वानुमान, छिड़काव और सिंचाई चेतावनी के साथ।",
+    en: "District-level 7-day forecast with spray safety windows and actionable farming advisories.",
+    hi: "सात दिन का ज़िला पूर्वानुमान, छिड़काव अनुकूलता और खेत की सुरक्षा सलाह।",
   },
   "/help": {
-    en: "Toll-free helplines and answers to the most common questions.",
-    hi: "टोल-फ़्री हेल्पलाइन और सबसे आम सवालों के जवाब।",
+    en: "File support tickets, receive official replies, view FAQs, and access 24/7 toll-free helplines.",
+    hi: "सहायता टिकट दर्ज करें, आधिकारिक जवाब पाएं और टोल-फ़्री किसान हेल्पलाइन देखें।",
   },
 } as const;
 

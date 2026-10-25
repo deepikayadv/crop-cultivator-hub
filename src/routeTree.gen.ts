@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CropsRouteImport } from './routes/crops'
+import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MarketRouteImport } from './routes/market'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RecommendationsRouteImport } from './routes/recommendations'
+import { Route as SavedSchemesRouteImport } from './routes/saved-schemes'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as WeatherRouteImport } from './routes/weather'
 
@@ -23,9 +29,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CropsRoute = CropsRouteImport.update({
   id: '/crops',
   path: '/crops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpensesRoute = ExpensesRouteImport.update({
+  id: '/expenses',
+  path: '/expenses',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -43,9 +59,29 @@ const MarketRoute = MarketRouteImport.update({
   path: '/market',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecommendationsRoute = RecommendationsRouteImport.update({
+  id: '/recommendations',
+  path: '/recommendations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedSchemesRoute = SavedSchemesRouteImport.update({
+  id: '/saved-schemes',
+  path: '/saved-schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -61,32 +97,50 @@ const WeatherRoute = WeatherRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/crops': typeof CropsRoute
+  '/expenses': typeof ExpensesRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/notifications': typeof NotificationsRoute
+  '/planner': typeof PlannerRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
+  '/saved-schemes': typeof SavedSchemesRoute
   '/schemes': typeof SchemesRoute
   '/weather': typeof WeatherRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/crops': typeof CropsRoute
+  '/expenses': typeof ExpensesRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/notifications': typeof NotificationsRoute
+  '/planner': typeof PlannerRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
+  '/saved-schemes': typeof SavedSchemesRoute
   '/schemes': typeof SchemesRoute
   '/weather': typeof WeatherRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/crops': typeof CropsRoute
+  '/expenses': typeof ExpensesRoute
   '/help': typeof HelpRoute
   '/login': typeof LoginRoute
   '/market': typeof MarketRoute
+  '/notifications': typeof NotificationsRoute
+  '/planner': typeof PlannerRoute
   '/profile': typeof ProfileRoute
+  '/recommendations': typeof RecommendationsRoute
+  '/saved-schemes': typeof SavedSchemesRoute
   '/schemes': typeof SchemesRoute
   '/weather': typeof WeatherRoute
 }
@@ -94,42 +148,66 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/crops'
+    | '/expenses'
     | '/help'
     | '/login'
     | '/market'
+    | '/notifications'
+    | '/planner'
     | '/profile'
+    | '/recommendations'
+    | '/saved-schemes'
     | '/schemes'
     | '/weather'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/crops'
+    | '/expenses'
     | '/help'
     | '/login'
     | '/market'
+    | '/notifications'
+    | '/planner'
     | '/profile'
+    | '/recommendations'
+    | '/saved-schemes'
     | '/schemes'
     | '/weather'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/crops'
+    | '/expenses'
     | '/help'
     | '/login'
     | '/market'
+    | '/notifications'
+    | '/planner'
     | '/profile'
+    | '/recommendations'
+    | '/saved-schemes'
     | '/schemes'
     | '/weather'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CropsRoute: typeof CropsRoute
+  ExpensesRoute: typeof ExpensesRoute
   HelpRoute: typeof HelpRoute
   LoginRoute: typeof LoginRoute
   MarketRoute: typeof MarketRoute
+  NotificationsRoute: typeof NotificationsRoute
+  PlannerRoute: typeof PlannerRoute
   ProfileRoute: typeof ProfileRoute
+  RecommendationsRoute: typeof RecommendationsRoute
+  SavedSchemesRoute: typeof SavedSchemesRoute
   SchemesRoute: typeof SchemesRoute
   WeatherRoute: typeof WeatherRoute
 }
@@ -143,11 +221,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crops': {
       id: '/crops'
       path: '/crops'
       fullPath: '/crops'
       preLoaderRoute: typeof CropsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expenses': {
+      id: '/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof ExpensesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -171,11 +263,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recommendations': {
+      id: '/recommendations'
+      path: '/recommendations'
+      fullPath: '/recommendations'
+      preLoaderRoute: typeof RecommendationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved-schemes': {
+      id: '/saved-schemes'
+      path: '/saved-schemes'
+      fullPath: '/saved-schemes'
+      preLoaderRoute: typeof SavedSchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -197,11 +317,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CropsRoute: CropsRoute,
+  ExpensesRoute: ExpensesRoute,
   HelpRoute: HelpRoute,
   LoginRoute: LoginRoute,
   MarketRoute: MarketRoute,
+  NotificationsRoute: NotificationsRoute,
+  PlannerRoute: PlannerRoute,
   ProfileRoute: ProfileRoute,
+  RecommendationsRoute: RecommendationsRoute,
+  SavedSchemesRoute: SavedSchemesRoute,
   SchemesRoute: SchemesRoute,
   WeatherRoute: WeatherRoute,
 }

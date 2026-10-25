@@ -86,13 +86,19 @@ function CropsPage() {
                   <Fact icon={Layers} label={t("soil")} value={tr(c.soil)} />
                 </div>
 
-                <p className="mt-5 rounded-lg bg-secondary p-3 text-sm">
+                <p className="mt-5 rounded-lg bg-secondary/50 p-3 text-sm">
                   <span className="font-semibold">{t("tip")}: </span>
                   {tr(c.tip)}
                 </p>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  {t("duration")}: {c.durationDays} {tr({ en: "days", hi: "दिन" })}
-                </p>
+                <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{t("duration")}: {c.durationDays} {tr({ en: "days", hi: "दिन" })}</span>
+                  <a
+                    href={`/planner`}
+                    className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+                  >
+                    <span>Plan this crop →</span>
+                  </a>
+                </div>
               </article>
             );
           })}

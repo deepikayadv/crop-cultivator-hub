@@ -9,113 +9,217 @@ import type {
   DashboardSummary,
   ExpenseEntry,
   NewCropPlan,
+  SaleEntry,
   SavedScheme,
+  SupportTicket,
 } from "@/types/domain";
-import { apiRequest, isApiConfigured, mockDelay } from "./api-client";
-import { mockStore } from "./mock-store";
+import { mockDelay } from "./api-client";
+import { frontendStore } from "./frontend-store";
 
-/** Each function calls the Express API when configured, otherwise demo data. */
-
-export async function getDashboardSummary(): Promise<DashboardSummary> {
-  if (isApiConfigured) return apiRequest("/dashboard/summary");
-  await mockDelay();
-  const ex = mockStore.expenses;
-  return {
-    savedSchemes: mockStore.saved.length,
-    activePlans: mockStore.plans.filter((p) => p.status !== "harvested").length,
-    monthExpense: ex.filter((e) => e.type === "expense").reduce((s, e) => s + e.amount, 0),
-    monthIncome: ex.filter((e) => e.type === "income").reduce((s, e) => s + e.amount, 0),
-    unreadNotifications: mockStore.notifications.filter((n) => !n.read).length,
-  };
+export async function getDashboardSummary(phone?: string): Promise<DashboardSummary> {
+  await mockDelay(150);
+  return frontendStore.getDashboardSummary(phone);
 }
 
 // Crop plans
-export async function listPlans(): Promise<CropPlan[]> {
-  if (isApiConfigured) return apiRequest("/crop-plans");
-  await mockDelay();
-  return [...mockStore.plans];
+export async function listPlans(phone?: string): Promise<CropPlan[]> {
+  await mockDelay(150);
+  return frontendStore.getPlans(phone);
 }
-export async function createPlan(input: NewCropPlan): Promise<CropPlan> {
-  if (isApiConfigured) return apiRequest("/crop-plans", { method: "POST", body: input });
-  await mockDelay();
-  const plan: CropPlan = { ...input, id: `p${Date.now()}`, status: "planned" };
-  mockStore.plans = [plan, ...mockStore.plans];
-  return plan;
+
+export async function createPlan(input: NewCropPlan, phone: string): Promise<CropPlan> {
+  await mockDelay(200);
+  return frontendStore.addPlan(input, phone);
 }
+
+export async function updatePlan(plan: CropPlan): Promise<CropPlan> {
+  await mockDelay(150);
+  return frontendStore.updatePlan(plan);
+}
+
 export async function deletePlan(id: string): Promise<void> {
-  if (isApiConfigured) return apiRequest(`/crop-plans/${encodeURIComponent(id)}`, { method: "DELETE" });
-  await mockDelay();
-  mockStore.plans = mockStore.plans.filter((p) => p.id !== id);
+  await mockDelay(150);
+  frontendStore.deletePlan(id);
 }
 
 // Expenses
-export async function listExpenses(): Promise<ExpenseEntry[]> {
-  if (isApiConfigured) return apiRequest("/expenses");
-  await mockDelay();
-  return [...mockStore.expenses];
+export async function listExpenses(phone?: string): Promise<ExpenseEntry[]> {
+  await mockDelay(150);
+  return frontendStore.getExpenses(phone);
+}
+
+export async function createExpense(
+  expense: Omit<ExpenseEntry, "id">,
+  phone: string,
+): Promise<ExpenseEntry> {
+  await mockDelay(150);
+  return frontendStore.addExpense(expense, phone);
+}
+
+export async function deleteExpense(id: string): Promise<void> {
+  await mockDelay(150);
+  frontendStore.deleteExpense(id);
+}
+
+// Sales
+export async function listSales(phone?: string): Promise<SaleEntry[]> {
+  await mockDelay(150);
+  return frontendStore.getSales(phone);
+}
+
+export async function createSale(
+  sale: Omit<SaleEntry, "id">,
+  phone: string,
+): Promise<SaleEntry> {
+  await mockDelay(150);
+  return frontendStore.addSale(sale, phone);
+}
+
+export async function deleteSale(id: string): Promise<void> {
+  await mockDelay(150);
+  frontendStore.deleteSale(id);
 }
 
 // Saved schemes
-export async function listSavedSchemes(): Promise<SavedScheme[]> {
-  if (isApiConfigured) return apiRequest("/saved-schemes");
-  await mockDelay();
-  return [...mockStore.saved];
+export async function listSavedSchemes(phone?: string): Promise<SavedScheme[]> {
+  await mockDelay(100);
+  return frontendStore.getSavedSchemes(phone);
 }
-export async function removeSavedScheme(id: string): Promise<void> {
-  if (isApiConfigured) return apiRequest(`/saved-schemes/${encodeURIComponent(id)}`, { method: "DELETE" });
-  await mockDelay();
-  mockStore.saved = mockStore.saved.filter((s) => s.id !== id);
+
+export async function toggleSaveScheme(schemeId: string, phone: string): Promise<boolean> {
+  await mockDelay(100);
+  return frontendStore.toggleSaveScheme(schemeId, phone);
 }
 
 // Notifications
-export async function listNotifications(): Promise<AppNotification[]> {
-  if (isApiConfigured) return apiRequest("/notifications");
-  await mockDelay(200);
-  return [...mockStore.notifications];
-}
-export async function markAllNotificationsRead(): Promise<void> {
-  if (isApiConfigured) return apiRequest("/notifications/read-all", { method: "PATCH" });
-  await mockDelay();
-  mockStore.notifications = mockStore.notifications.map((n) => ({ ...n, read: true }));
+export async function listNotifications(phone?: string): Promise<AppNotification[]> {
+  await mockDelay(100);
+  return frontendStore.getNotifications(phone);
 }
 
-// Crop advisor
+export async function markNotificationRead(id: string): Promise<void> {
+  frontendStore.markNotificationRead(id);
+}
+
+export async function markAllNotificationsRead(phone?: string): Promise<void> {
+  await mockDelay(100);
+  frontendStore.markAllNotificationsRead(phone);
+}
+
+// Support Tickets
+export async function listTickets(phone?: string): Promise<SupportTicket[]> {
+  await mockDelay(150);
+  return phone ? frontendStore.getTickets(phone) : frontendStore.getAllTickets();
+}
+
+export async function submitSupportTicket(
+  ticket: Omit<SupportTicket, "id" | "createdAt" | "status">,
+): Promise<SupportTicket> {
+  await mockDelay(250);
+  return frontendStore.submitTicket(ticket);
+}
+
+export async function replyToSupportTicket(
+  ticketId: string,
+  reply: string,
+  status: "in_progress" | "resolved",
+): Promise<SupportTicket | null> {
+  await mockDelay(200);
+  return frontendStore.replyToTicket(ticketId, reply, status);
+}
+
+// Crop advisor engine
 export async function getRecommendations(input: AdvisorInput): Promise<CropRecommendation[]> {
-  if (isApiConfigured) return apiRequest("/recommendations", { method: "POST", body: input });
-  await mockDelay(500);
-  const waterScore = { low: 0, medium: 1, high: 2 }[input.water];
-  return crops
-    .filter((c) => c.season === input.season)
-    .map((c) => {
-      const thirsty = /paddy|rice|sugarcane|धान/i.test(c.name.en) ? 2 : /wheat|maize/i.test(c.name.en) ? 1 : 0;
-      const score = Math.max(40, 95 - Math.abs(thirsty - waterScore) * 20);
-      return {
-        cropId: c.id,
-        crop: c.name,
-        emoji: c.emoji,
-        score,
-        reason: {
-          en: `Suits ${input.season} season. Water need: ${c.water.en}. Soil: ${c.soil.en}.`,
-          hi: `${c.sowing.hi} में बुवाई। पानी: ${c.water.hi}। मिट्टी: ${c.soil.hi}।`,
-        },
-      };
-    })
-    .sort((a, b) => b.score - a.score);
+  await mockDelay(250);
+
+  // Match season and evaluate soil and water suitability
+  return crops.map((c) => {
+    let score = 50;
+
+    // Season match
+    if (c.season === input.season) score += 30;
+
+    // Soil compatibility
+    const soilLower = input.soil.toLowerCase();
+    const cSoil = c.soil.en.toLowerCase();
+    if (cSoil.includes(soilLower) || soilLower.includes("alluvial") || cSoil.includes("well-drained")) {
+      score += 10;
+    }
+
+    // Water compatibility
+    const waterLower = input.water.toLowerCase();
+    const cWater = c.water.en.toLowerCase();
+    if (
+      (waterLower === "high" || waterLower === "canal") &&
+      (cWater.includes("high") || cWater.includes("frequent") || /paddy|sugarcane/i.test(c.name.en))
+    ) {
+      score += 10;
+    } else if (
+      (waterLower === "low" || waterLower === "rainfed") &&
+      (cWater.includes("low") || cWater.includes("drought") || /mustard|gram|millet/i.test(c.name.en))
+    ) {
+      score += 10;
+    } else {
+      score += 5;
+    }
+
+    // Cap score at 98
+    const finalScore = Math.min(98, Math.max(45, score));
+
+    return {
+      cropId: c.id,
+      crop: c.name,
+      emoji: c.emoji,
+      score: finalScore,
+      suitableSeason: {
+        en: c.season.toUpperCase(),
+        hi: c.season === "rabi" ? "रबी" : c.season === "kharif" ? "खरीफ" : "जायद",
+      },
+      soilRequirements: c.soil,
+      waterRequirements: c.water,
+      growingDuration: {
+        en: `${c.durationDays} days`,
+        hi: `${c.durationDays} दिन`,
+      },
+      reason: {
+        en: `High suitability for ${input.season} season in ${input.state || "Northern Plains"}. Compatible with ${input.soil} soil and ${input.water} irrigation.`,
+        hi: `${input.season === "rabi" ? "रबी" : "खरीफ"} मौसम और ${input.soil} मिट्टी के लिए अत्यधिक उपयुक्त। ${input.water} सिंचाई व्यवस्था के अनुकूल।`,
+      },
+    };
+  }).sort((a, b) => b.score - a.score);
 }
 
 // Admin
 export async function getAdminStats(): Promise<AdminStats> {
-  if (isApiConfigured) return apiRequest("/admin/stats");
-  await mockDelay();
+  await mockDelay(150);
+  const farmers = frontendStore.getAllFarmers();
+  const plans = frontendStore.getPlans();
+  const tickets = frontendStore.getAllTickets();
+  const expenses = frontendStore.getExpenses();
+  const sales = frontendStore.getSales();
+
   return {
-    farmers: mockStore.users.filter((u) => u.role === "farmer").length,
-    admins: mockStore.users.filter((u) => u.role === "admin").length,
-    openTickets: 3,
-    schemes: 8,
+    farmers: farmers.length,
+    activeCropPlans: plans.filter((p) => p.status !== "harvested" && p.status !== "cancelled").length,
+    totalSchemes: 8,
+    openTickets: tickets.filter((t) => t.status === "open" || t.status === "in_progress").length,
+    totalExpensesRecorded: expenses.reduce((s, e) => s + Number(e.amount || 0), 0),
+    totalRevenueRecorded: sales.reduce((s, e) => s + Number(e.totalAmount || 0), 0),
   };
 }
-export async function listUsers(): Promise<AdminUser[]> {
-  if (isApiConfigured) return apiRequest("/admin/users");
-  await mockDelay();
-  return [...mockStore.users];
+
+export async function listAdminUsers(): Promise<AdminUser[]> {
+  await mockDelay(150);
+  const farmers = frontendStore.getAllFarmers();
+  return farmers.map((f) => ({
+    id: f.id ?? `farmer-${f.phone}`,
+    name: f.name,
+    phone: f.phone,
+    email: f.email,
+    village: f.village,
+    district: f.district,
+    state: f.state,
+    role: f.phone === "9999999999" ? "admin" : "farmer",
+    joinedAt: f.createdAt ?? "2026-01-01",
+  }));
 }

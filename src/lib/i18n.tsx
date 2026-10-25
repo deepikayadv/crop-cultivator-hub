@@ -27,13 +27,23 @@ export const dictionary = {
     hi: "किसान के हर सवाल का जवाब, एक ही जगह।",
   },
   navHome: { en: "Home", hi: "होम" },
-  navSchemes: { en: "Schemes", hi: "योजनाएँ" },
+  navSchemes: { en: "Government Schemes", hi: "सरकारी योजनाएँ" },
   navCrops: { en: "Crop Calendar", hi: "फसल कैलेंडर" },
   navMarket: { en: "Mandi Prices", hi: "मंडी भाव" },
   navWeather: { en: "Weather", hi: "मौसम" },
-  navHelp: { en: "Help", hi: "सहायता" },
+  navHelp: { en: "Help & Support", hi: "सहायता व सवाल" },
   navLogin: { en: "Sign in", hi: "साइन इन" },
   navProfile: { en: "My Profile", hi: "मेरी प्रोफ़ाइल" },
+  navDashboard: { en: "Dashboard", hi: "डैशबोर्ड" },
+  navFarming: { en: "Farming", hi: "कृषि सेवाएं" },
+  navPlanner: { en: "Crop Planner", hi: "फसल योजना" },
+  navRecommendation: { en: "Crop Advisor", hi: "फसल सुझाव" },
+  navMarkets: { en: "Markets & Finance", hi: "मंडी व वित्त" },
+  navFinance: { en: "Expenses & Profit", hi: "खर्च व लाभ" },
+  navGovernment: { en: "Government", hi: "सरकारी सेवाएं" },
+  navSavedSchemes: { en: "Saved Schemes", hi: "सेव की गई योजनाएँ" },
+  navNotifications: { en: "Notifications", hi: "सूचनाएं" },
+  navAdmin: { en: "Admin", hi: "व्यवस्थापक" },
   signOut: { en: "Sign out", hi: "साइन आउट" },
 
   heroTitle: {
@@ -127,8 +137,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       lang,
       setLang,
       toggle: () => setLang(lang === "en" ? "hi" : "en"),
-      t: (key) => dictionary[key][lang],
-      tr: (value) => value[lang],
+      t: (key) => dictionary[key]?.[lang] || dictionary[key]?.en || key,
+      tr: (value) => {
+        if (!value) return "";
+        if (typeof value === "string") return value;
+        return value[lang] || value.en || "";
+      },
     }),
     [lang, setLang],
   );
